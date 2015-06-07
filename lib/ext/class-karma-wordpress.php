@@ -37,16 +37,23 @@ class Karma_Wordpress {
 	}
 
 	public static function user_register ( $user_id ) {
-		Karma::setKarma( Karma::getKarma( $user_id ) + get_option('karma-welcome', 0), $user_id );
+		Karma::set_karma( Karma::get_user_total_karma( $user_id ) + get_option('karma-welcome', 0), $user_id );
 	}
 	
 	public static function wp_set_comment_status( $comment_id, $status ) {
 		$user = get_user_by( 'email', get_comment_author_email( $comment_id ) );
 		if ( $user ) {
 			if ( $status == "approve" ) {
-				Karma::setKarma( Karma::getKarma( $user->ID ) + get_option('karma-comments', 1), $user->ID );
+				Karma::set_karma( get_option('karma-comments', 1), 
+					$user->ID,
+					array(
+						'description' => sprintf( __( 'Comment approved %d', KARMA_DOMAIN ), $comment_id ),
+						'status' => get_option( 'karma-karma_status', KARMA_STATUS_ACCEPTED )
+					)
+			);
 			} else if ( $status == "hold" || $status == "spam" || $status == "delete" || $status == "trash" ) {
-				Karma::setKarma( Karma::getKarma( $user->ID ) - get_option('karma-comments', 1), $user->ID );
+				// @todo cambiar el status de los comentarios está mal implementado. Hay que actualizar karma, no añadir ni eliminar
+				Karma::set_karma( Karma::get_user_total_karma( $user->ID ) - get_option('karma-comments', 1), $user->ID );
 			}
 			
 		}
@@ -56,7 +63,13 @@ class Karma_Wordpress {
 		$user = get_user_by( 'email', get_comment_author_email( $comment_id ) );
 		if ( $user ) {
 			if ( $status == "1" ) {
-				Karma::setKarma( Karma::getKarma( $user->ID ) + get_option('karma-comments', 1), $user->ID );
+				Karma::set_karma( get_option('karma-comments', 1), 
+					$user->ID,
+					array(
+						'description' => sprintf( __( 'Comment posted %d', KARMA_DOMAIN ), $comment_id ),
+						'status' => get_option( 'karma-karma_status', KARMA_STATUS_ACCEPTED )
+					)
+				);
 			}
 		}
 	}

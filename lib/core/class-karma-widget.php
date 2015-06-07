@@ -31,13 +31,13 @@ class Karma_Widget extends WP_Widget {
 	 */
 	function Karma_Widget() {
 		parent::WP_Widget( false, $name = 'Karma Users' );
-		add_action( 'wp_print_styles', array( 'Karma_Widget', '_print_styles' ) );
+		add_action( 'wp_print_styles', array( __CLASS__, '_print_styles' ) );
 	}
 	
 	/**
 	 * Enqueues required stylesheets.
 	 */
-	function _print_styles() {
+	public static function _print_styles() {
 		wp_enqueue_style( 'karma', KARMA_PLUGIN_URL . 'css/karma.css', array() );
 	}
 	
@@ -60,7 +60,7 @@ class Karma_Widget extends WP_Widget {
 		$order = $instance['order'];
 		$order_by = 'karma';
 		
-		$karmausers = Karma::getKarmaUsers( $limit, $order_by, $order );
+		$karmausers = Karma::get_karmas( $limit, $order_by, $order );
 		
 		if ( sizeof( $karmausers )>0 ) {
 			foreach ( $karmausers as $karmauser ) {
@@ -69,7 +69,7 @@ class Karma_Widget extends WP_Widget {
 				echo get_user_meta ( $karmauser->user_id, 'nickname', true );
 				echo ':</span>';
 				echo '<span class="karma-user-karma">';
-				echo $karmauser->karma . " " . get_option('karma-karma_label', KARMA_DEFAULT_KARMA_LABEL);
+				echo $karmauser->total . " " . get_option('karma-karma_label', KARMA_DEFAULT_KARMA_LABEL);
 				echo '</span>';
 				echo '</div>';
 			}

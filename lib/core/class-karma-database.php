@@ -34,39 +34,5 @@ class Karma_Database {
 		}
 		return $result;
 	}
-	
-	public static function getKarmaUser ( $user_id ) {
-		global $wpdb;
-	
-		$result = $wpdb->get_row("SELECT karma FROM " . self::karma_get_table( "users" ) . " WHERE user_id = '$user_id'");
-	
-		if ( $result ) {
-			$result = $result->karma;
-		} else {
-			$result = 0;
-		}
-		return $result;
-	}
-	
-	public static function getKarmaUsers ( $limit, $order_by, $order ){
-		global $wpdb;
-		
-		$result = $wpdb->get_results("SELECT * FROM " . self::karma_get_table( "users" ) . " ORDER BY " . $order_by . " " . $order . " LIMIT 0 ," . $limit);
-		
-		return $result;
-	}
-	
-	public static function updateKarmaUser( $karma, $user_id ) {
-		global $wpdb;
-	
-		$rows_affected = $wpdb->update( self::karma_get_table("users"), array( 'karma' => $karma ) , array( 'user_id' => $user_id ) );
-	
-		if ( !$rows_affected ) { // insert
-			$rows_affected = $wpdb->insert( self::karma_get_table("users"), array( 'user_id' => $user_id, 'karma' => $karma ) );
-		}
-		return $rows_affected;
-	}
-	
+
 }
-
-

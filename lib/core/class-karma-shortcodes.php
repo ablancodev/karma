@@ -43,16 +43,17 @@ class Karma_Shortcodes {
 		extract( $options );
 		$output = "";
 		
-		$karmausers = Karma::getKarmaUsers( $limit, $order_by, $order );
+		$karmausers = Karma::get_users();
 		
 		if ( sizeof( $karmausers )>0 ) {
 			foreach ( $karmausers as $karmauser ) {
+				$total = Karma::get_user_total_karma( $karmauser );
 				$output .='<div class="karma-user">';
 				$output .= '<span class="karma-user-username">';
-				$output .= get_user_meta ( $karmauser->user_id, 'nickname', true );
+				$output .= get_user_meta ( $karmauser, 'nickname', true );
 				$output .= ':</span>';
 				$output .= '<span class="karma-user-karma">';
-				$output .= " ". $karmauser->karma . " " . get_option('karma-karma_label', KARMA_DEFAULT_KARMA_LABEL);
+				$output .= " ". $total . " " . get_option('karma-karma_label', KARMA_DEFAULT_KARMA_LABEL);
 				$output .= '</span>';
 				$output .= '</div>';
 			}
@@ -63,8 +64,20 @@ class Karma_Shortcodes {
 		return $output;
 	}
 	
+	
+	// voyporaqui pasa del id, algo estoy haciendo mal
+	
+	
+	
 	public static function karma_user( $atts, $content = null ) {
 		$output = "";
+		
+		/*
+		ob_start();
+		var_dump($atts);
+		$result = ob_get_clean();
+		error_log($result);
+		*/
 		
 		$options = shortcode_atts(
 				array(
@@ -73,12 +86,15 @@ class Karma_Shortcodes {
 				$atts
 		);
 		extract( $options );
+		
+		echo 'ID:' . $id . "-" . $options['id'];
+		
 		if ( $id == "" ) {
 			$id = get_current_user_id();
 		}
 		
 		if ( $id !== 0 ) {
-			$karma = Karma::getKarma( $id );
+			$karma = Karma::get_user_total_karma( $id );
 			$output .= $karma;
 		}
 		
