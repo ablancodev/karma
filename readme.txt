@@ -19,7 +19,7 @@ Enhanced functionality is available via official [extensions](http://www.eggempl
 
 ### Documentation ###
 
-The official documentation is located at the [Karma documentation pages](http://www.eggemplo.com/documentation/karma-documentation/).
+The official documentation is located at the [Karma documentation pages](http://www.karma.com/documentation/karma/).
 
 ### Features ###
 
@@ -80,8 +80,6 @@ Welcome !!! Please give us all your crazy ideas.
 See also [Karma](http://www.eggemplo.com/plugins/karma/)
 
 1. Options - you can adjust the plugin's settings here.
-2. Widget admin - widget to show most popular users.
-3. Widget - See the widget working.
 
 == Changelog ==
 
